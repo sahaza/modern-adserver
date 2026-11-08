@@ -14,24 +14,58 @@
 * Set rules to target the delivery of campaigns, or even ads, to specific users, to help maximise the effectiveness of campaigns.
 
 The codebase is written in a modern stack: **Node.js 22+ / TypeScript** (see [`node/`](node/)).
-Modern AdServer is a rewrite of Revive Adserver; the legacy PHP code has been removed from the repository entirely, including from the git history (history was rewritten).
+Modern AdServer is a rewrite of Revive Adserver; the legacy PHP code was purged from the repository, including its git history.
 
-# Requirements
+# Installation
 
-* Node.js 22 or greater
-* PostgreSQL (optional — without `DATABASE_URL` the server runs on in-memory storage for development)
+## Option A — Docker (fastest)
 
-# Quick start
+Requires Docker with the Compose plugin.
 
 ```sh
-cd node
-npm ci
-npm test          # vitest suite
-npm run build     # tsc -> dist/
-npm start         # serves on 127.0.0.1:3000 (PORT/HOST/DATABASE_URL env vars)
+git clone https://github.com/sahaza/modern-adserver.git
+cd modern-adserver
+docker compose up -d        # builds the image, starts Modern AdServer + PostgreSQL
 ```
 
+The server listens on **http://localhost:3000** (PostgreSQL runs in a second container; the schema is created automatically on first start). Check status:
+
+```sh
+curl http://localhost:3000/health
+# {"status":"ok","storage":"postgres","dbOk":true,...}
+```
+
+Stop with `docker compose down` (add `-v` to also remove the database volume).
+
+## Option B — from source
+
+Requires **Node.js 22+** (and optionally PostgreSQL).
+
+```sh
+git clone https://github.com/sahaza/modern-adserver.git
+cd modern-adserver/node
+npm ci
+npm run build
+npm start                   # http://127.0.0.1:3000
+```
+
+Run the tests with `npm test`, typecheck with `npm run typecheck`.
+
+## Configuration
+
+Configuration is via environment variables (see [.env.example](.env.example)):
+
+| Variable | Default | Description |
+|---|---|---|
+| `PORT` | `3000` | HTTP port |
+| `HOST` | `127.0.0.1` | Bind address — set `0.0.0.0` in containers / behind a reverse proxy |
+| `DATABASE_URL` | _(unset)_ | PostgreSQL connection string. Unset = in-memory storage (dev only, data lost on restart). Schema auto-applied on startup |
+
 # API
+
+Health:
+
+* `GET /health` — liveness/readiness (`{"status":"ok","storage":"postgres","dbOk":true}`)
 
 Delivery engine:
 
@@ -49,7 +83,7 @@ See [`node/README.md`](node/README.md) for details.
 
 # Development
 
-TypeScript strict mode, Fastify 5, Kysely + pg, Zod validation, Vitest. CI (`.github/workflows/node-ci.yml`) runs typecheck, tests and build on Node 22 for every push and pull request touching `node/`.
+TypeScript strict mode, Fastify 5, Kysely + pg, Zod validation, Vitest. CI (`.github/workflows/node-ci.yml`) runs typecheck, tests, build and a Docker image build on Node 22 / ubuntu for every push and pull request touching `node/`.
 
 Bug reports and feature requests: please use [GitHub issues](https://github.com/sahaza/modern-adserver/issues) and [discussions](https://github.com/sahaza/modern-adserver/discussions).
 

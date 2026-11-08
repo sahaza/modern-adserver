@@ -24,6 +24,15 @@ export async function migrate(db: Kysely<Database>): Promise<void> {
 export class PgRepositories implements Repositories {
   constructor(private readonly db: Kysely<Database>) {}
 
+  async healthCheck(): Promise<boolean> {
+    try {
+      await sql`SELECT 1`.execute(this.db);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   async getZone(zoneId: number): Promise<Zone | null> {
     const row = await this.db
       .selectFrom('zones')

@@ -4,6 +4,12 @@ All notable changes to Modern AdServer will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Simple installation: multi-stage `node/Dockerfile` (non-root, healthcheck), root `docker-compose.yml` (app + PostgreSQL 16), `.env.example`
+- `GET /health` liveness/readiness endpoint (reports storage backend and DB connectivity)
+- Graceful shutdown on SIGINT/SIGTERM
+- CI: Docker image build job in `node-ci.yml`
+
 ### Changed
 - Project renamed to **Modern AdServer** and relicensed under the **MIT** license (previously GPL-2.0-or-later, see `LICENSE.txt`)
 - Codebase rewritten in **TypeScript/Node.js** under `node/` (Fastify, Kysely/pg, Zod, Vitest); the legacy PHP application was removed from the repository entirely, including a full git history rewrite (no PHP code remains in any branch)

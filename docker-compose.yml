@@ -1,0 +1,34 @@
+name: modern-adserver
+
+services:
+  adserver:
+    build: ./node
+    ports:
+      - "3000:3000"
+    environment:
+      HOST: 0.0.0.0
+      PORT: "3000"
+      # Without DATABASE_URL the server uses in-memory storage (data lost on restart).
+      # The schema (db/schema.sql) is applied automatically on startup.
+      DATABASE_URL: postgres://adserver:adserver@db:5432/adserver
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: adserver
+      POSTGRES_PASSWORD: adserver
+      POSTGRES_DB: adserver
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adserver -d adserver"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

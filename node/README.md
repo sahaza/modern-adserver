@@ -23,7 +23,19 @@ npm start       # node dist/server.js  (PORT, HOST, DATABASE_URL env vars)
 npm run dev     # tsx watch
 ```
 
+## Docker
+
+From the repository root: `docker compose up -d` builds this directory (`Dockerfile`)
+and starts Modern AdServer on port 3000 together with a PostgreSQL container.
+The image is multi-stage (deps → build → runtime), runs as a non-root user,
+and ships a `HEALTHCHECK` against `GET /health`. Configuration via environment
+variables — see [.env.example](../.env.example).
+
 ## API
+
+Health:
+
+- `GET /health` — liveness/readiness probe
 
 Delivery engine:
 

@@ -1,6 +1,8 @@
 import type { AdHourlyStat, Banner, BannerCandidate, Campaign, Zone } from '../domain/types.js';
 
 export interface Repositories {
+  healthCheck(): Promise<boolean>;
+
   getZone(zoneId: number): Promise<Zone | null>;
   listZones(): Promise<Zone[]>;
   createZone(input: Omit<Zone, 'id'>): Promise<Zone>;
@@ -33,6 +35,10 @@ export class MemoryRepositories implements Repositories {
   private nextZoneId = 1;
   private nextCampaignId = 1;
   private nextBannerId = 1;
+
+  async healthCheck(): Promise<boolean> {
+    return true;
+  }
 
   async getZone(zoneId: number): Promise<Zone | null> {
     return this.zones.get(zoneId) ?? null;
