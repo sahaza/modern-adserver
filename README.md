@@ -14,7 +14,7 @@
 * Set rules to target the delivery of campaigns, or even ads, to specific users, to help maximise the effectiveness of campaigns.
 
 The codebase is written in a modern stack: **Node.js 22+ / TypeScript** (see [`node/`](node/)).
-Modern AdServer is a rewrite of Revive Adserver; the legacy PHP implementation is preserved on the [`archive/legacy-php`](https://github.com/sahaza/revive-adserver/tree/archive/legacy-php) branch.
+Modern AdServer is a rewrite of Revive Adserver; the legacy PHP code has been removed from the default branch and remains only in the repository's git history.
 
 # Requirements
 
