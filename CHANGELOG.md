@@ -1,6 +1,12 @@
 # Changelog
 
-All notable changes to Revive Adserver will be documented in this file.
+All notable changes to Modern AdServer will be documented in this file.
+
+## [Unreleased]
+
+### Changed
+- Project renamed to **Modern AdServer** and relicensed under the **MIT** license (previously GPL-2.0-or-later, see `LICENSE.txt`)
+- Codebase rewritten in **TypeScript/Node.js** under `node/` (Fastify, Kysely/pg, Zod, Vitest); the legacy PHP application is archived on the `archive/legacy-php` branch
 
 ## [6.1.0]
 

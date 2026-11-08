@@ -1,8 +1,9 @@
 {
-  "name": "@revive/adserver-node",
+  "name": "modern-adserver",
   "version": "0.1.0",
   "private": true,
-  "description": "Revive Adserver next-generation core — TypeScript/Node.js rewrite of the ad server",
+  "description": "Modern AdServer — open source ad serving system (TypeScript/Node.js)",
+  "license": "MIT",
   "type": "module",
   "engines": {
     "node": ">=22"

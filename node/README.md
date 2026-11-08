@@ -1,8 +1,7 @@
-# Revive Adserver — Node.js/TypeScript core (next generation)
+# Modern AdServer — TypeScript/Node.js core
 
-This directory contains the TypeScript/Node.js rewrite of the Revive Adserver codebase.
-The legacy PHP application in the repository root remains the production system until this
-implementation reaches feature parity; both are tracked side by side.
+This directory contains the Modern AdServer codebase: an open source ad server written in
+TypeScript on Node.js 22+.
 
 ## Stack
 
@@ -50,3 +49,7 @@ src/routes/            delivery and admin HTTP routes
 src/server.ts          application factory + entrypoint
 tests/                 vitest suites
 ```
+
+## License
+
+MIT — see [LICENSE.txt](../LICENSE.txt).

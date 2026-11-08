@@ -1,6 +1,9 @@
 --------------------------------------------------------------------------------
 
-Revive Adserver is Copyright (c) 2013-2016 Revive Software and Services BV
+Modern AdServer is Copyright (c) 2026 The Modern AdServer contributors
+
+Modern AdServer is a rewrite of Revive Adserver, which was
+Copyright (c) 2013-2016 Revive Software and Services BV
 
  - http://www.revive-sas.com/
 
@@ -26,7 +29,7 @@ contributions to the code:
  - Wu Shuwen
  - Jiří Černý
 
-Please note: The Revive Adserver team does not have time to track every single
+Please note: The Modern AdServer team does not have time to track every single
 pull request that is merged into the project. If you would like your name
 included in the above list, please include the change in your pull request or
 simply ask to have it added in GitHub. Otherwise, thank you so much to everyone
@@ -34,7 +37,7 @@ who contributes but is not listed above!
 
 --------------------------------------------------------------------------------
 
-Revive Adserver is based on OpenX Source, which was Copyright (c) 2003-2013
+Modern AdServer is based on Revive Adserver, which was based on OpenX Source, Copyright (c) 2003-2013
 OpenX Limited.
 
 Openx Source was based on phpAdsNew 2, phpAdsNew 1 and phpAds, which were
@@ -50,7 +53,7 @@ Copyright (c) 1999 - 2009 by the original authors:
 
 --------------------------------------------------------------------------------
 
-Revive Adserver release packages may also bundle the following packages:
+Historical release packages of the Revive Adserver codebase also bundled the following packages:
 
  - sinergi/browser-detector: Copyright (c) Chris Schuld, Gabriel Bull
 

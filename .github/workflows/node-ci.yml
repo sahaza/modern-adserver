@@ -1,4 +1,4 @@
-name: Node CI
+name: Modern AdServer CI
 
 on:
   workflow_dispatch: ~
