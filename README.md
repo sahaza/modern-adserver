@@ -1,6 +1,9 @@
 # Revive Adserver
 #### The world's most popular free, open source ad serving system
 
+[![CI](https://github.com/revive-adserver/revive-adserver/actions/workflows/ci.yml/badge.svg)](https://github.com/revive-adserver/revive-adserver/actions/workflows/ci.yml)
+[![Tests](https://github.com/revive-adserver/revive-adserver/actions/workflows/test.yml/badge.svg)](https://github.com/revive-adserver/revive-adserver/actions/workflows/test.yml)
+
 **Revive Adserver is an open source ad serving tool** that enables publishers to:
 
 * Serve ads on their websites;
@@ -11,7 +14,13 @@
 
 * Set rules to target the delivery of campaigns, or even ads, to specific users, to help maximise the effectiveness of campaigns.
 
+# Requirements
 
+* PHP 8.2.35 or greater, with the extensions listed in `composer.json` (including `intl`, `zip`, and a database driver: `mysqli` or `pgsql`)
+* MySQL/MariaDB or PostgreSQL
+* A web server (Apache or nginx) with PHP support
+
+For the full, up-to-date list, see the [system requirements](https://www.revive-adserver.com/support/requirements/).
 
 # Download
 
@@ -23,6 +32,13 @@ Revive Adserver as available from github as a zip file is not suitable for insta
 
 Please ONLY download Revive Adserver as a release package from the Revive Adserver website at https://www.revive-adserver.com/.
 
+Installation and upgrade instructions are available at:
+
+* https://www.revive-adserver.com/how-to/install/
+* https://www.revive-adserver.com/how-to/update/
+
+Full documentation: https://documentation.revive-adserver.com/
+
 
 
 # Hosted edition
@@ -31,7 +47,26 @@ If you'd like to use the Revive Adserver software without having to download, in
 
 You can find out more about the Hosted edition, and subscribe at https://www.revive-adserver.net/.
 
+# Development
 
+The codebase is PHP 8.2+ with dependencies managed by [Composer](https://getcomposer.org/) (installed into `lib/vendor`). After cloning:
+
+```sh
+composer install
+```
+
+Static analysis, code style and refactoring tooling are configured and run in CI:
+
+* `lib/vendor/bin/phpstan` — static analysis
+* `lib/vendor/bin/ecs` — coding standards
+* `lib/vendor/bin/rector` — automated refactoring
+* PHPUnit test suites under `tests/` — run in CI across PHP 8.2–8.4 against MySQL and PostgreSQL (see [.github/workflows](.github/workflows))
+
+Bug reports and feature requests: please use [GitHub issues](https://github.com/revive-adserver/revive-adserver/issues) or the [community forums](https://forum.revive-adserver.com/).
+
+# Security
+
+To report a vulnerability, please use our responsible disclosure program at https://hackerone.com/revive_adserver — see [SECURITY.md](SECURITY.md). Do not open public issues for security concerns.
 
 # License
 

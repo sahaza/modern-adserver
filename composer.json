@@ -9,6 +9,23 @@
             "email": "revive@revive-adserver.com"
         }
     ],
+    "homepage": "https://www.revive-adserver.com/",
+    "keywords": [
+        "adserver",
+        "ad-server",
+        "advertising",
+        "ads",
+        "banner",
+        "open-source",
+        "php"
+    ],
+    "support": {
+        "issues": "https://github.com/revive-adserver/revive-adserver/issues",
+        "forum": "https://forum.revive-adserver.com/",
+        "docs": "https://documentation.revive-adserver.com/",
+        "security": "https://hackerone.com/revive_adserver",
+        "source": "https://github.com/revive-adserver/revive-adserver"
+    },
     "minimum-stability": "stable",
     "config": {
         "vendor-dir": "lib/vendor",

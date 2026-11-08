@@ -10,7 +10,7 @@
 ##
 # If you have one or more custom PHP binaries, you can use them for the build
 # by specifying them here. This is particularly useful for multiple versions.
-max.php_cli_executable=php4
+max.php_cli_executable=php
 
 ##
 # Selenium Remote Control needs to launch a Firefox process with profile
