@@ -1,9 +1,9 @@
 We prefer to use GitHub issues only for reporting of actual bugs, or for requests for new features (preferably by means of a pull request).
 Before submitting an issue, please check the following:
 - You are using the latest version of Modern AdServer.
-- You have searched the existing [issues](https://github.com/sahaza/revive-adserver/issues) for the same or a similar bug.
-- You have searched the [discussions](https://github.com/sahaza/revive-adserver/discussions) for any answers to your problem or question.
-- If it's not a bug, but rather a question, please post your topic in the [discussions](https://github.com/sahaza/revive-adserver/discussions/).
+- You have searched the existing [issues](https://github.com/sahaza/modern-adserver/issues) for the same or a similar bug.
+- You have searched the [discussions](https://github.com/sahaza/modern-adserver/discussions) for any answers to your problem or question.
+- If it's not a bug, but rather a question, please post your topic in the [discussions](https://github.com/sahaza/modern-adserver/discussions/).
 
 If you've gone through all of the above, and are convinced you should open an issue to report a bug, then follow these guidelines:
 - Properly format the issue title – `Scope :: One short and clear sentence to describe the issue`.

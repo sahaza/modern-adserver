@@ -1,7 +1,7 @@
 # Modern AdServer
 #### Open source ad serving system
 
-[![CI](https://github.com/sahaza/revive-adserver/actions/workflows/node-ci.yml/badge.svg)](https://github.com/sahaza/revive-adserver/actions/workflows/node-ci.yml)
+[![CI](https://github.com/sahaza/modern-adserver/actions/workflows/node-ci.yml/badge.svg)](https://github.com/sahaza/modern-adserver/actions/workflows/node-ci.yml)
 
 **Modern AdServer is an open source ad serving tool** that enables publishers to:
 
@@ -51,11 +51,11 @@ See [`node/README.md`](node/README.md) for details.
 
 TypeScript strict mode, Fastify 5, Kysely + pg, Zod validation, Vitest. CI (`.github/workflows/node-ci.yml`) runs typecheck, tests and build on Node 22 for every push and pull request touching `node/`.
 
-Bug reports and feature requests: please use [GitHub issues](https://github.com/sahaza/revive-adserver/issues) and [discussions](https://github.com/sahaza/revive-adserver/discussions).
+Bug reports and feature requests: please use [GitHub issues](https://github.com/sahaza/modern-adserver/issues) and [discussions](https://github.com/sahaza/modern-adserver/discussions).
 
 # Security
 
-To report a vulnerability, use [private vulnerability reporting](https://github.com/sahaza/revive-adserver/security/advisories/new) — see [SECURITY.md](SECURITY.md). Do not open public issues for security concerns.
+To report a vulnerability, use [private vulnerability reporting](https://github.com/sahaza/modern-adserver/security/advisories/new) — see [SECURITY.md](SECURITY.md). Do not open public issues for security concerns.
 
 # License
 
