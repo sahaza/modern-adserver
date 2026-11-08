@@ -1,8 +1,7 @@
 # Revive Adserver
 #### The world's most popular free, open source ad serving system
 
-[![CI](https://github.com/revive-adserver/revive-adserver/actions/workflows/ci.yml/badge.svg)](https://github.com/revive-adserver/revive-adserver/actions/workflows/ci.yml)
-[![Tests](https://github.com/revive-adserver/revive-adserver/actions/workflows/test.yml/badge.svg)](https://github.com/revive-adserver/revive-adserver/actions/workflows/test.yml)
+[![Node CI](https://github.com/sahaza/revive-adserver/actions/workflows/node-ci.yml/badge.svg)](https://github.com/sahaza/revive-adserver/actions/workflows/node-ci.yml)
 
 **Revive Adserver is an open source ad serving tool** that enables publishers to:
 
@@ -14,55 +13,44 @@
 
 * Set rules to target the delivery of campaigns, or even ads, to specific users, to help maximise the effectiveness of campaigns.
 
+The codebase has been rewritten in a modern stack: **Node.js 22+ / TypeScript**, with the application under [`node/`](node/). The previous PHP implementation is archived on the [`archive/legacy-php`](https://github.com/sahaza/revive-adserver/tree/archive/legacy-php) branch.
+
 # Requirements
 
-* PHP 8.2.35 or greater, with the extensions listed in `composer.json` (including `intl`, `zip`, and a database driver: `mysqli` or `pgsql`)
-* MySQL/MariaDB or PostgreSQL
-* A web server (Apache or nginx) with PHP support
+* Node.js 22 or greater
+* PostgreSQL (optional — without `DATABASE_URL` the server runs on in-memory storage for development)
 
-For the full, up-to-date list, see the [system requirements](https://www.revive-adserver.com/support/requirements/).
+# Quick start
 
-# Download
+```sh
+cd node
+npm ci
+npm test          # vitest suite
+npm run build     # tsc -> dist/
+npm start         # serves on 127.0.0.1:3000 (PORT/HOST/DATABASE_URL env vars)
+```
 
-**DO NOT DOWNLOAD AS A ZIP FILE FROM GITHUB**
+# API
 
-Download the latest version from: https://www.revive-adserver.com/download/
+Delivery engine:
 
-Revive Adserver as available from github as a zip file is not suitable for installation on a server. It contains a number of files that are for development only, and are removed during the release packaging process.
+* `GET /delivery/zone/:zoneId` — select and return a banner for the zone
+* `GET /delivery/impression/:bannerId?zone=:zoneId` — record an impression
+* `GET /delivery/click/:bannerId?zone=:zoneId` — record a click, 302 to the banner target
 
-Please ONLY download Revive Adserver as a release package from the Revive Adserver website at https://www.revive-adserver.com/.
+Admin API:
 
-Installation and upgrade instructions are available at:
+* `POST|GET /admin/zones`, `POST|GET /admin/campaigns`, `POST|GET /admin/banners`
+* `POST /admin/zones/:zoneId/banners` — link a banner to a zone
+* `GET /admin/banners/:bannerId/stats` — hourly impressions/clicks
 
-* https://www.revive-adserver.com/how-to/install/
-* https://www.revive-adserver.com/how-to/update/
-
-Full documentation: https://documentation.revive-adserver.com/
-
-
-
-# Hosted edition
-
-If you'd like to use the Revive Adserver software without having to download, install, configure, and maintain it yourself, there is also a Hosted edition.
-
-You can find out more about the Hosted edition, and subscribe at https://www.revive-adserver.net/.
+See [`node/README.md`](node/README.md) for details.
 
 # Development
 
-The codebase is PHP 8.2+ with dependencies managed by [Composer](https://getcomposer.org/) (installed into `lib/vendor`). After cloning:
+TypeScript strict mode, Fastify 5, Kysely + pg, Zod validation, Vitest. CI (`.github/workflows/node-ci.yml`) runs typecheck, tests and build on Node 22 for every push and pull request touching `node/`.
 
-```sh
-composer install
-```
-
-Static analysis, code style and refactoring tooling are configured and run in CI:
-
-* `lib/vendor/bin/phpstan` — static analysis
-* `lib/vendor/bin/ecs` — coding standards
-* `lib/vendor/bin/rector` — automated refactoring
-* PHPUnit test suites under `tests/` — run in CI across PHP 8.2–8.4 against MySQL and PostgreSQL (see [.github/workflows](.github/workflows))
-
-Bug reports and feature requests: please use [GitHub issues](https://github.com/revive-adserver/revive-adserver/issues) or the [community forums](https://forum.revive-adserver.com/).
+Bug reports and feature requests: please use [GitHub issues](https://github.com/sahaza/revive-adserver/issues) or the [community forums](https://forum.revive-adserver.com/).
 
 # Security
 
@@ -88,6 +76,5 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 ------------------------------------------------------------------------
 
-This product uses GeoLite2 data created by MaxMind, available from the 
-https://www.maxmind.com/ website. See also:
-https://www.revive-adserver.com/blog/new-geotargeting-plugin-in-revive-adserver-v5-an-overview/
+This product uses GeoLite2 data created by MaxMind, available from the
+https://www.maxmind.com/ website.
