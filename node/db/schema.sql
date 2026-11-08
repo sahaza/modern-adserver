@@ -1,0 +1,56 @@
+CREATE TABLE IF NOT EXISTS agencies (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS advertisers (
+  id SERIAL PRIMARY KEY,
+  agency_id INTEGER NOT NULL REFERENCES agencies(id),
+  name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS campaigns (
+  id SERIAL PRIMARY KEY,
+  advertiser_id INTEGER NOT NULL REFERENCES advertisers(id),
+  name TEXT NOT NULL,
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  start_date TIMESTAMPTZ,
+  end_date TIMESTAMPTZ,
+  weight INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS banners (
+  id SERIAL PRIMARY KEY,
+  campaign_id INTEGER NOT NULL REFERENCES campaigns(id),
+  name TEXT NOT NULL,
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  weight INTEGER NOT NULL DEFAULT 1,
+  width INTEGER NOT NULL,
+  height INTEGER NOT NULL,
+  image_url TEXT,
+  click_url TEXT,
+  html_body TEXT
+);
+
+CREATE TABLE IF NOT EXISTS zones (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  width INTEGER NOT NULL,
+  height INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS zone_banners (
+  zone_id INTEGER NOT NULL REFERENCES zones(id),
+  banner_id INTEGER NOT NULL REFERENCES banners(id),
+  PRIMARY KEY (zone_id, banner_id)
+);
+
+CREATE TABLE IF NOT EXISTS stats_ad_hourly (
+  banner_id INTEGER NOT NULL REFERENCES banners(id),
+  day DATE NOT NULL,
+  hour INTEGER NOT NULL CHECK (hour BETWEEN 0 AND 23),
+  impressions INTEGER NOT NULL DEFAULT 0,
+  clicks INTEGER NOT NULL DEFAULT 0,
+  views INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (banner_id, day, hour)
+);
