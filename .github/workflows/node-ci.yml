@@ -1,0 +1,42 @@
+name: Modern AdServer CI
+
+on:
+  workflow_dispatch: ~
+  pull_request:
+    paths:
+      - 'node/**'
+      - '.github/workflows/node-ci.yml'
+  push:
+    paths:
+      - 'node/**'
+      - '.github/workflows/node-ci.yml'
+
+jobs:
+  test:
+    name: TypeScript typecheck, tests, build
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: node
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: node/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build

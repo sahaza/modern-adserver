@@ -1,0 +1,319 @@
+# Changelog
+
+All notable changes to Modern AdServer will be documented in this file.
+
+## [Unreleased]
+
+### Changed
+- Project renamed to **Modern AdServer** and relicensed under the **MIT** license (previously GPL-2.0-or-later, see `LICENSE.txt`)
+- Codebase rewritten in **TypeScript/Node.js** under `node/` (Fastify, Kysely/pg, Zod, Vitest); the legacy PHP application was removed from the repository entirely, including a full git history rewrite (no PHP code remains in any branch)
+
+## [6.1.0]
+
+### Fixes
+- Fixed extra space below banners served by asynchronous tags ([#973](https://github.com/revive-adserver/revive-adserver/pull/973))
+- Avoided full banner table scans when auditing duplicated SQL images ([#1788](https://github.com/revive-adserver/revive-adserver/pull/1788))
+- Users with only trafficker permissions could see a JavaScript alert error when linking or unlinking campaigns or banners to a zone ([#1698](https://github.com/revive-adserver/revive-adserver/issues/1698))
+- Users with only trafficker permissions could link campaigns belonging to a different agency to their zones ([#1700](https://github.com/revive-adserver/revive-adserver/issues/1700))
+- New `script/console` commands were not verifying the accuracy of the hostname, when provided through the `-H` option ([#1695](https://github.com/revive-adserver/revive-adserver/issues/1695))
+- Added missing escaping in conversion comments when displayed in conversion statistics ([#1708](https://github.com/revive-adserver/revive-adserver/issues/1708))
+- Added proper validation to tracker variable names ([#1707](https://github.com/revive-adserver/revive-adserver/issues/1707))
+- The *Account Preferences* section was not accessible from the UI due to a permissions error ([#1711](https://github.com/revive-adserver/revive-adserver/issues/1711))
+- Added validation to the language field in user preferences and optimized language loading ([#1710](https://github.com/revive-adserver/revive-adserver/issues/1710))
+- Delivery capping / blocking values were correctly saved for banners, but not displayed back on the UI ([#1709](https://github.com/revive-adserver/revive-adserver/issues/1709))
+- Added missing HTML escaping in the error message when trying to link a wrong type of baner to a zone ([#1703](https://github.com/revive-adserver/revive-adserver/issues/1703))
+- Fixed PHP fatal error when opening the tracker append code page ([#1719](https://github.com/revive-adserver/revive-adserver/issues/1719))
+- Fixed a PHP fatal error when reporting database errors during an upgrade ([#1721](https://github.com/revive-adserver/revive-adserver/issues/1721))
+- Added missing HTML escaping to the campaign name in email-zone date-conflict errors ([#1763](https://github.com/revive-adserver/revive-adserver/issues/1763))
+- Existing users with legacy usernames containing spaces could not be linked to accounts or have their permissions updated ([#1764](https://github.com/revive-adserver/revive-adserver/issues/1764))
+- Added missing HTML escaping to campaign names in the zone linked-banners view ([#1769](https://github.com/revive-adserver/revive-adserver/issues/1769))
+- Improved ownership validation to prevent bypassing the restriction on moving trackers to a client belonging to a different manager ([#1773](https://github.com/revive-adserver/revive-adserver/issues/1773))
+- Disabled banner storage types could still be selected through modified form submissions ([#1777](https://github.com/revive-adserver/revive-adserver/issues/1777))
+- The dashboard statistics graph could scan the whole `data_summary_ad_hourly` table for managers with a large number of banners ([#1775](https://github.com/revive-adserver/revive-adserver/issues/1775))
+- Fixed calendar language fallback when using legacy language names or no user language preference ([#1758](https://github.com/revive-adserver/revive-adserver/pull/1758))
+- Added missing installer state and authentication checks before finalising an up-to-date installation ([#1761](https://github.com/revive-adserver/revive-adserver/issues/1761))
+- Fixed date delivery limitations blocking delivery when no date was selected ([#1755](https://github.com/revive-adserver/revive-adserver/pull/1755))
+- Fixed SMTP authentication with usernames or passwords containing reserved URI characters ([#1754](https://github.com/revive-adserver/revive-adserver/pull/1754))
+- Fixed the file delivery cache reporting success when writing or replacing a cache file failed ([#1753](https://github.com/revive-adserver/revive-adserver/pull/1753))
+- Fixed a division-by-zero error in the Campaign Delivery Report when no impressions were delivered during yesterday's comparison hours ([#1749](https://github.com/revive-adserver/revive-adserver/pull/1749))
+- Fixed incorrect conversion success rates in entity statistics and totals ([#1747](https://github.com/revive-adserver/revive-adserver/pull/1747))
+- Fixed plugin installation only validating menu definitions for the first account type ([#1746](https://github.com/revive-adserver/revive-adserver/pull/1746))
+- Fixed a PHP warning when opening an unknown or expired password recovery link ([#1744](https://github.com/revive-adserver/revive-adserver/pull/1744))
+- Fixed plugin upgrades repeatedly applying preference batches and ignoring registration or removal failures ([#1743](https://github.com/revive-adserver/revive-adserver/pull/1743))
+- Fixed PHP warnings and schema paths being cleared during plugin upgrade integrity checks ([#1742](https://github.com/revive-adserver/revive-adserver/pull/1742))
+- Fixed successful plugin component uninstalls being recorded as failed installations in the upgrade audit ([#1741](https://github.com/revive-adserver/revive-adserver/pull/1741))
+- Fixed package upgrades potentially uninstalling retained components when component groups were reordered or an earlier group was removed ([#1739](https://github.com/revive-adserver/revive-adserver/pull/1739))
+- Fixed database upgrades continuing after a field or index migration hook reported failure ([#1738](https://github.com/revive-adserver/revive-adserver/pull/1738))
+- Fixed campaign impression distribution using another manager's timezone when managers have different timezone preferences ([#1737](https://github.com/revive-adserver/revive-adserver/pull/1737))
+- Fixed the remnant eCPM algorithm using default zone forecasts after processing the first agency ([#1736](https://github.com/revive-adserver/revive-adserver/pull/1736))
+- Fixed local hourly statistics showing mismatched dates and hours and splitting totals during the end of daylight saving time ([#1735](https://github.com/revive-adserver/revive-adserver/pull/1735))
+- Fixed installer task exceptions not being reported by the final installation step ([#1734](https://github.com/revive-adserver/revive-adserver/pull/1734))
+- Fixed Zone API validation reporting errors for accepted types and failing to report invalid types ([#1732](https://github.com/revive-adserver/revive-adserver/pull/1732))
+- Fixed chained ads applying incorrect view and click tracking flags ([#1731](https://github.com/revive-adserver/revive-adserver/pull/1731))
+- Fixed `_enc` site-variable macros being HTML-escaped instead of URL-encoded ([#1730](https://github.com/revive-adserver/revive-adserver/pull/1730))
+- Fixed the orphan-image cleanup command deleting alternate images still referenced by banners ([#1729](https://github.com/revive-adserver/revive-adserver/pull/1729))
+- Fixed PostgreSQL monthly statistics condensation skipping daily aggregates ([#1727](https://github.com/revive-adserver/revive-adserver/pull/1727))
+- Fixed delivery log code generation when a plugin depends on another plugin that has its own dependencies ([#1724](https://github.com/revive-adserver/revive-adserver/pull/1724))
+- Fixed User Log zone and date filters returning incorrect results, and sorting and page-size preferences not being saved ([#1723](https://github.com/revive-adserver/revive-adserver/pull/1723))
+- Added missing translations to advertiser, campaign and banner lists ([#122](https://github.com/revive-adserver/revive-adserver/issues/122))
+- Fixed companion ad selection not recognizing a previously delivered companion campaign ([#1728](https://github.com/revive-adserver/revive-adserver/pull/1728))
+- The Advertisers list with "Hide inactive" loaded every banner of the account, which was slow and could exceed the memory limit with a large number of banners ([#1785](https://github.com/revive-adserver/revive-adserver/issues/1785))
+
+### Added
+
+- Added XML-RPC methods to list banners linked to zones and zones linked to banners ([#339](https://github.com/revive-adserver/revive-adserver/pull/339)).
+- Added the disabled-by-default `security.allowLinkingExistingUsers` configuration option to allow managers to link existing users to other accounts and search all users in autocomplete. Enabling it is not recommended on shared instances ([#1765](https://github.com/revive-adserver/revive-adserver/issues/1765))
+- Added signed impression logging URLs with optional expiration through the `delivery.logUrlValidity` configuration setting ([#1687](https://github.com/revive-adserver/revive-adserver/issues/1687))
+
+### Changed
+
+- Revive Adserver now requires at least PHP 8.2.35.
+- The `ftp` PHP extension is now required to store banner files via FTP.
+- Simplified character encoding conversion to use the required `intl` extension.
+- Replaced the legacy XML-RPC update check with a JSON API ([#1694](https://github.com/revive-adserver/revive-adserver/issues/1694)).
+- Removed unused ad categories and OpenX category metadata from affiliates and zones, completing the previously deferred database cleanup ([#1787](https://github.com/revive-adserver/revive-adserver/issues/1787)).
+
+## [6.0.8] - 2026-06-25
+
+### [Security fixes](https://www.revive-adserver.com/security/revive-sa-2026-003/)
+
+- [CVE-2026-50739](https://www.cve.org/CVERecord?id=CVE-2026-50739): Missing ownership validation allows cross‑manager tracker–campaign linking
+- [CVE-2026-50740](https://www.cve.org/CVERecord?id=CVE-2026-50740): Reflected XSS via unsanitised refresh parameter in zone invocation tag
+- [CVE-2026-50741](https://www.cve.org/CVERecord?id=CVE-2026-50741): Code injection via unsafe plugin identifiers and XML‑RPC channel targeting
+- [CVE-2026-50742](https://www.cve.org/CVERecord?id=CVE-2026-50742): Stored XSS in maintenance tools via unescaped entity names
+- [CVE-2026-50743](https://www.cve.org/CVERecord?id=CVE-2026-50743): CSRF in zone‑include.php allows unauthorized banner and campaign linking
+- [CVE-2026-50744](https://www.cve.org/CVERecord?id=CVE-2026-50744): XML‑RPC login leak exposes valid session ID enabling unauthorized API access
+- [CVE-2026-50745](https://www.cve.org/CVERecord?id=CVE-2026-50745): Reflected XSS in stats‑video.php via improperly encoded URL parameters
+
+### Fixes
+
+- Removed an outdated link in a warning message related to data stored in non-UTC timezone ([#1689](https://github.com/revive-adserver/revive-adserver/issues/1689))
+- Fixed one of the command line parameters for the Condense tool introduced in v6.0.7 ([#1688](https://github.com/revive-adserver/revive-adserver/issues/1688))
+- The `left` and `top` GET parameters where not properly sanitised before being printed in `apu.php` ([#1685](https://github.com/revive-adserver/revive-adserver/issues/1685))
+- The HTML5 banner filename was displayed in `banner-edit.php` without proper escaping ([#1686](https://github.com/revive-adserver/revive-adserver/issues/1686))
+- Custom date range wasn't working in advanced reports when using non-english localisation ([#1697](https://github.com/revive-adserver/revive-adserver/issues/1697))
+
+## [6.0.7] - 2026-06-03
+
+### [Security fixes](https://www.revive-adserver.com/security/revive-sa-2026-002/)
+
+- Fixed multiple vulnerabilites:
+  - [CVE-2026-34912](https://www.cve.org/CVERecord?id=CVE-2026-34912): Missing access control when linking banners or campaigns to zones
+  - [CVE-2026-34913](https://www.cve.org/CVERecord?id=CVE-2026-34913): Missing access control when linking trackers to campaigns
+  - [CVE-2026-34914](https://www.cve.org/CVERecord?id=CVE-2026-34914): Blind SQL injection via clientid parameter in zone-include.php
+  - [CVE-2026-34915](https://www.cve.org/CVERecord?id=CVE-2026-34915): Reflected XSS via clientid parameter in zone-include.php
+  - [CVE-2026-34916](https://www.cve.org/CVERecord?id=CVE-2026-34916): PHP code injection via delivery limitation logical parameter
+  - [CVE-2026-34917](https://www.cve.org/CVERecord?id=CVE-2026-34917): Session ID reuse allowing XML‑RPC API authentication bypass
+  - [CVE-2026-44956](https://www.cve.org/CVERecord?id=CVE-2026-44956): Stored XSS via Full Name field in userlog email entries
+  - [CVE-2026-44957](https://www.cve.org/CVERecord?id=CVE-2026-44957): Missing access control when modifying parent entities via XML‑RPC
+  - [CVE-2026-44958](https://www.cve.org/CVERecord?id=CVE-2026-44958): Banner status override by advertiser‑level users
+  - [CVE-2026-44959](https://www.cve.org/CVERecord?id=CVE-2026-44959): PHP code injection via unexpected delivery limitation parameter
+  - [CVE-2026-44960](https://www.cve.org/CVERecord?id=CVE-2026-44960): Stored XSS via malicious usernames in audit log details
+  - [CVE-2026-44961](https://www.cve.org/CVERecord?id=CVE-2026-44961): Username validation bypass in XML‑RPC addUser method
+
+### Fixes
+
+- The **Time - Date** delivery rule wasn't properly working when using languages other than English ([#1662](https://github.com/revive-adserver/revive-adserver/issues/1662))
+- PHP Fatal error `Non-static method Console_Getopt::getopt2() cannot be called statically` ([#1664](https://github.com/revive-adserver/revive-adserver/pull/1664))
+- Deprecation errors displayed on PHP 8.5 under some circumstances ([#1665](https://github.com/revive-adserver/revive-adserver/issues/1665))
+- PHP Fatal error `Call to undefined function each()` when using the bundled XML-RPC API client libraries ([#1671](https://github.com/revive-adserver/revive-adserver/issues/1671))
+- Potential PHP Fatal error during maintenance with custom plugins ([#1673](https://github.com/revive-adserver/revive-adserver/issues/1673))
+- Moving trackers to another client was always resulting in a permissions error ([#1674](https://github.com/revive-adserver/revive-adserver/issues/1674))
+- It was possible to move trackers to a client belonging to a different manager ([#1672](https://github.com/revive-adserver/revive-adserver/issues/1672))
+- Moved the CSRF token check before validation in all settings and preferences pages ([#1670](https://github.com/revive-adserver/revive-adserver/issues/1670))  
+- Added ownership check to the banner HTML preview ([#1679](https://github.com/revive-adserver/revive-adserver/issues/1679))
+- PHP Fatal error when sending unexpected elements in the XML-RPC message to the API ([#1682](https://github.com/revive-adserver/revive-adserver/issues/1682))
+
+### Added
+
+- Experimental condense-stats command to aggregate older statistics and save on database space ([#1677](https://github.com/revive-adserver/revive-adserver/issues/1677))
+
+### Changed
+- Relax plugin ZIP filename check, in order to allow suffixes appended by browsers or for versioning ([#1667](https://github.com/revive-adserver/revive-adserver/issues/1667))
+
+## [6.0.6] - 2026-03-18
+
+### Fixes
+
+- Added missing escaping when displaying alt text as HTML title in afr.php and ac.php ([#1636](https://github.com/revive-adserver/revive-adserver/issues/1636))
+- Since 6.0.5 it was not possible to delete all the limitations for a banner or a delivery rule set ([#1640](https://github.com/revive-adserver/revive-adserver/issues/1640)) 
+- Calendar wasn't properly working in some languages ([#1647](https://github.com/revive-adserver/revive-adserver/issues/1647))
+- Fixed PHP fatal error when spcjs.php is called for a website with no zones ([#1621](https://github.com/revive-adserver/revive-adserver/issues/1621))
+- Deleting the last manager was displaying an alert with an error message ([#1650](https://github.com/revive-adserver/revive-adserver/issues/1650))
+- PHP Fatal error on userlog-index.php when no audit records were present ([#1649](https://github.com/revive-adserver/revive-adserver/issues/1649))
+- Proper header was missing from the newly added account statistics screens ([#1648](https://github.com/revive-adserver/revive-adserver/issues/1648))
+- Custom database charset configuration was wiped out during upgrades ([#1646](https://github.com/revive-adserver/revive-adserver/issues/1646))
+- Empty or invalid email addresses were causing fatal PHP errors when sending emails ([#1654](https://github.com/revive-adserver/revive-adserver/issues/1654))
+- Some setting were lost when upgrading from versions < 2.6, making it impossible to log in after the upgrade ([#1655](https://github.com/revive-adserver/revive-adserver/issues/1655))
+- Ripple loading animation could appear when installing or upgrading over the existing progress indicators ([#1656](https://github.com/revive-adserver/revive-adserver/issues/1656))
+- E-mail addresses with a "+" were improperly rejected when adding accounts ([#1659](https://github.com/revive-adserver/revive-adserver/issues/1659))
+
+### Added
+- Allow configuration of HTTPS access to the admin UI during installation ([#1622](https://github.com/revive-adserver/revive-adserver/issues/1622))
+- Added soft and hard limits to settings length in order to avoid extra resource consumption when parsing the configuration file ([#1637](https://github.com/revive-adserver/revive-adserver/issues/1637))
+
+### Changed
+- Improved compatibility with the development version of PHP (8.6.x) ([5a67649](https://github.com/revive-adserver/revive-adserver/commit/5a67649))
+
+## [6.0.5] - 2026-01-14
+
+### [Security fixes](https://www.revive-adserver.com/security/revive-sa-2026-001/)
+
+- Fixed multiple vulnerabilities:
+    - [CVE-2026-21640](https://www.cve.org/CVERecord?id=CVE-2026-21640)
+    - [CVE-2026-21641](https://www.cve.org/CVERecord?id=CVE-2026-21641)
+    - [CVE-2026-21642](https://www.cve.org/CVERecord?id=CVE-2026-21642)
+    - [CVE-2026-21663](https://www.cve.org/CVERecord?id=CVE-2026-21663)
+    - [CVE-2026-21664](https://www.cve.org/CVERecord?id=CVE-2026-21664)
+
+### Fixes
+
+- Loading animation was stuck when downloading advanced reports ([#1620](https://github.com/revive-adserver/revive-adserver/issues/1620))
+- Campaign start/end dates were not saved when conversion tracking was disabled and using non-english localisation ([#1628](https://github.com/revive-adserver/revive-adserver/issues/1628)) 
+- Allow bannerType plugins to specify if file upload is required when using `addUploadGroup()` ([#1631](https://github.com/revive-adserver/revive-adserver/issues/1631))
+- Added missing escaping when displaying information in plugin screens ([#1632](https://github.com/revive-adserver/revive-adserver/issues/1632))
+
+### Added
+- Added support for AVIF image banners ([#1625](https://github.com/revive-adserver/revive-adserver/issues/1625))
+
+### Changed
+- Massively optimized the SQL query used in manager-level global statistics ([#1630](https://github.com/revive-adserver/revive-adserver/issues/1630))
+
+
+## [6.0.4] - 2025-11-26
+
+### [Security fixes](https://www.revive-adserver.com/security/revive-sa-2025-005/)
+
+- Incomplete List of Disallowed Inputs [CVE-2025-55129](https://www.cve.org/CVERecord?id=CVE-2025-55129)
+
+### Fixes
+
+- Fixed SQL errors when mangling execution order in the POST of banner / channel delivery limitations ([#1606](https://github.com/revive-adserver/revive-adserver/issues/1606))
+- When changing language, the notification message is now translated using the new language ([#1607](https://github.com/revive-adserver/revive-adserver/issues/1607))
+- Added missing validation when changing the user's own email address via the User Preferences ([#1609](https://github.com/revive-adserver/revive-adserver/issues/1609))
+- VAST properties were not properly saved into the `banner_vast_element` table for newly created banners ([#1616](https://github.com/revive-adserver/revive-adserver/issues/1616))
+
+
+## [6.0.3] - 2025-11-19
+
+### [Security fixes](https://www.revive-adserver.com/security/revive-sa-2025-004/)
+
+- Fixed multiple vulnerabilities:
+    - [CVE-2025-55126](https://www.cve.org/CVERecord?id=CVE-2025-55126)
+    - [CVE-2025-55127](https://www.cve.org/CVERecord?id=CVE-2025-55127)
+    - [CVE-2025-55128](https://www.cve.org/CVERecord?id=CVE-2025-55128)
+
+### Fixes
+
+- Removed local and XML-RPC invocation file names from banner delivery settings, which were still present and marked as required, but not populated ([#1599](https://github.com/revive-adserver/revive-adserver/issues/1599))
+- Editing existing image banners wrongly required always uploading an image file ([#1598](https://github.com/revive-adserver/revive-adserver/issues/1598))
+- The localised date picker was not working with non-latin alphabets ([#1597](https://github.com/revive-adserver/revive-adserver/issues/1597))
+
+### Changed
+
+- Hidden PEAR/SQL errors from non-admin users ([#1604](https://github.com/revive-adserver/revive-adserver/issues/1604))
+
+
+## [6.0.2] - 2025-11-05
+
+### [Security fixes](https://www.revive-adserver.com/security/revive-sa-2025-003/)
+
+- Fixed multiple vulnerabilities:
+  - [CVE-2025-48986](https://www.cve.org/CVERecord?id=CVE-2025-48986)
+  - [CVE-2025-48987](https://www.cve.org/CVERecord?id=CVE-2025-48987)
+  - [CVE-2025-52666](https://www.cve.org/CVERecord?id=CVE-2025-52666)
+  - [CVE-2025-52667](https://www.cve.org/CVERecord?id=CVE-2025-52667)
+  - [CVE-2025-52668](https://www.cve.org/CVERecord?id=CVE-2025-52668)
+  - [CVE-2025-52669](https://www.cve.org/CVERecord?id=CVE-2025-52669)
+  - [CVE-2025-52670](https://www.cve.org/CVERecord?id=CVE-2025-52670)
+  - [CVE-2025-52671](https://www.cve.org/CVERecord?id=CVE-2025-52671)
+  - [CVE-2025-55123](https://www.cve.org/CVERecord?id=CVE-2025-55123)
+  - [CVE-2025-55124](https://www.cve.org/CVERecord?id=CVE-2025-55124)
+  - [CVE-2025-55125](https://www.cve.org/CVERecord?id=CVE-2025-55125)
+
+### Fixes
+
+- Fixed typo preventing Excel exports from working ([#1590](https://github.com/revive-adserver/revive-adserver/issues/1590))
+- Fixed UI bug in the *Hostname List* and *Registerable Domain List* delivery rules ([#1589](https://github.com/revive-adserver/revive-adserver/issues/1589))
+- Fixed issue with campaign start/end date when editing campaigns using non-english language ([#1588](https://github.com/revive-adserver/revive-adserver/issues/1588)) 
+- Removed link from campaign names when logged in as advertiser as they can't edit campaigns ([#1593](https://github.com/revive-adserver/revive-adserver/issues/1593))
+- Fixed issue with animation being stuck when exporting statistics to Excel ([#1591](https://github.com/revive-adserver/revive-adserver/issues/1591))
+- Fixed PHP fatal error in the *Email Settings* screen when no Mailer plugin is installed ([#1595](https://github.com/revive-adserver/revive-adserver/issues/1595))
+
+
+## [6.0.1] - 2025-10-24
+
+### [Security fixes](https://www.revive-adserver.com/security/revive-sa-2025-002/)
+
+- Fixed SQL injection ([CVE-2025-52664](https://www.cve.org/CVERecord?id=CVE-2025-52664))
+
+### Fixes
+
+- Fixed issue with the search window checkboxes being reset when submitting a new keyword ([#1587](https://github.com/revive-adserver/revive-adserver/issues/1587))
+
+
+## [6.0.0] - 2025-10-22
+
+### [Security fixes](https://www.revive-adserver.com/security/revive-sa-2025-001/)
+
+- Fixed Reflected XSS vulnerability ([CVE-2025-27208](https://www.cve.org/CVERecord?id=CVE-2025-27208))
+
+### Added
+
+- Added new `addMagicMacros` delivery plugin hook.
+- New `displayNameLength` configuration directive to increase the length of campaign and banner names displayed in the zone linking screens.
+- Added loading animation when the next screen is taking some time to load and a new UI setting to disable or customise how long to wait before displaying the loader (defaults to 250ms).
+- Added new command to delete orphaned images or HTML5 banner folders. The command can be executed using the new script/console entry point, based on Symfony Console Command component.
+- Added support for writing to a `fail2ban` compatible log file on unsuccessful login attempts.
+- Added new setting to send a `Link` header during delivery when using HTTPS and images are hosted on a different hostname then delivery (e.g. CDN), in order to speed up ad rendering on a page. Based on the setting, browsers will either attempt to pre-connect to the images server, or just perform a DNS lookup.
+- Added new _Disable delivery cookies_ setting. For more information see: https://documentation.revive-adserver.com/display/DOCS/Third+party+cookies
+- Added `[cookie] adminDomain` advanced setting to allow custom configuration in case the admin console runs behind a reverse proxy and login isn't working.
+- Added a warning message in the banner edit screen when non-HTTPS assets are used and banner won't be selected for delivery on HTTPS pages.
+- Added missing localization for the date pickers.
+- Added optional banner file size limit to the banners storage settings.
+- Added zone filtering to the _Linked Zones_ tab for banners.
+- Added new Mailer plugin, allowing to use SMTP or a selection of 3rd party providers to send emails. By default, no plugin is configured or selected in the e-mail settings, so the legacy code is in use, granting backwards compatibility.
+- Added `Cross-Origin-Resource-Policy` header to the delivery `asyncjs.php` script.
+
+### Changed
+
+- Revive Adserver now requires at least PHP 8.1
+- Updated the MaxMind GeoIP2 plugin to support the upcoming changes in the procedures required to download database updates from MaxMind. In order for the automatic updates to continue working, the MaxMind account ID needs to be added in the plugin configuration screen.
+- Improved pruning of the `data_summary_ad_zone_assoc` table.
+- Optimised some queries used in the statistics screen, leading to faster response times on very large instances.
+- Replaced advertiser and website statistics with a new account statistics screen for administrator users.
+- The `intl` PHP extension is now required in order to run Revive Adserver.
+
+### Deprecated
+
+- Deprecated `[rawDatabase]` section in the config file is no longer supported.
+- Deprecated SQL stored banners: the default setting for new installations is to disallow SQL stored banners.
+- Deprecated popups and interstitials: it is no longer possible to create new popup or interstitial zones. Existing tags will continue to work as expected, until the functionality will be fully removed in a future version.
+
+### Removed
+
+- Removed obsolete P3P headers and settings.
+- Removed local mode tags, previously deprecated in v5.3.0.
+- Removed XML-RPC tags, previously deprecated in v5.3.0.
+- Removed option to generate pop-unders, which are not allowed by modern browsers.
+- Removed the possibility to configure the Operation Interval setting from the user interface, effectively deprecating non-standard usages. In fact using anything different from 60 minutes is complex, confusing, and fraught with danger.
+- Removed the legacy _Client- Browser (Deprecated)_ and _Client- Operating System (Deprecated)_ delivery rules.
+
+### Fixed
+
+- `HEAD` requests to delivery scripts were previously executed and counted as proper requests, even though the ad payload would have been discarded.
+- Fixed issue with the search functionality being case-sensitive when using a Postgres database.
+- Changed the `OAGEO` cookie from session cookie to permanent, with a 30m expiration time. This should allow refreshing geo information for mobile users on the move.
+- Fixed the definition of the `acls` and `acls_channel` tables so that they have a proper primary key.
+- Fixed the definition of the `banners_vast_element` table in the IAB VAST Plugin to use a primary key and avoid the creation of an additional "banners_vast_element_seq" table on MySQL without any prefix.
+- Fixed an issue preventing contract campaigns from working properly with hour of day limitation in non-UTC timezones or with campaigns having daily targets.
+- Fixed improper handling of write errors when downloading GeoLiteCity database files.
+- Fixed issue with search settings being reset when typing a new search keyword. Compact view is also the new default in order to keep resource usage low.
+- Fixed an issue preventing webp banners from being displayed on Newsletter zones and when using Image Invocation Code.
+- Fixed sorting by campaign type in the advertisers campaign screen.
+- Improved command line installer by including the field name in form error messages and removing the unused -H option.
+- Fixed command line installer not picking up the custom image store path and not setting permissions on .htaccess files.
+- Fixed global settings help link.
+- Fixed non-working sorting in the websites list inventory screen.
+- Fixed avw.php logging an ad impression when requesting a non-existing zone.
+- Fixed PHP 8.1+ compatibility issues in the republish maintenance script.
