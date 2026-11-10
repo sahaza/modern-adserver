@@ -14,16 +14,23 @@ CREATE TABLE IF NOT EXISTS campaigns (
   advertiser_id INTEGER NOT NULL REFERENCES advertisers(id),
   name TEXT NOT NULL,
   active BOOLEAN NOT NULL DEFAULT TRUE,
+  status TEXT NOT NULL DEFAULT 'active',
   start_date TIMESTAMPTZ,
   end_date TIMESTAMPTZ,
   weight INTEGER NOT NULL DEFAULT 1
 );
+
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS status TEXT;
+UPDATE campaigns SET status = CASE WHEN active THEN 'active' ELSE 'paused' END WHERE status IS NULL;
+ALTER TABLE campaigns ALTER COLUMN status SET NOT NULL;
+ALTER TABLE campaigns ALTER COLUMN status SET DEFAULT 'active';
 
 CREATE TABLE IF NOT EXISTS banners (
   id SERIAL PRIMARY KEY,
   campaign_id INTEGER NOT NULL REFERENCES campaigns(id),
   name TEXT NOT NULL,
   active BOOLEAN NOT NULL DEFAULT TRUE,
+  status TEXT NOT NULL DEFAULT 'active',
   weight INTEGER NOT NULL DEFAULT 1,
   width INTEGER NOT NULL,
   height INTEGER NOT NULL,
@@ -31,6 +38,11 @@ CREATE TABLE IF NOT EXISTS banners (
   click_url TEXT,
   html_body TEXT
 );
+
+ALTER TABLE banners ADD COLUMN IF NOT EXISTS status TEXT;
+UPDATE banners SET status = CASE WHEN active THEN 'active' ELSE 'paused' END WHERE status IS NULL;
+ALTER TABLE banners ALTER COLUMN status SET NOT NULL;
+ALTER TABLE banners ALTER COLUMN status SET DEFAULT 'active';
 
 CREATE TABLE IF NOT EXISTS zones (
   id SERIAL PRIMARY KEY,

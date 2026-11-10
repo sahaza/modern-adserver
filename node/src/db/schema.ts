@@ -16,6 +16,7 @@ export interface CampaignsTable {
   advertiser_id: number;
   name: string;
   active: boolean;
+  status: string;
   start_date: Date | null;
   end_date: Date | null;
   weight: number;
@@ -26,6 +27,7 @@ export interface BannersTable {
   campaign_id: number;
   name: string;
   active: boolean;
+  status: string;
   weight: number;
   width: number;
   height: number;

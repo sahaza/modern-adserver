@@ -9,6 +9,8 @@ All notable changes to Modern AdServer will be documented in this file.
 - `GET /health` liveness/readiness endpoint (reports storage backend and DB connectivity)
 - Graceful shutdown on SIGINT/SIGTERM
 - CI: Docker image build job in `node-ci.yml`
+- Explicit lifecycle state machine for campaigns and banners (`src/domain/stateMachine.ts`): statuses `draft/active/paused/archived` with validated transitions, effective states `scheduled/active/expired` derived from the date window; `POST /admin/campaigns/:id/transition` and `POST /admin/banners/:id/transition` (409 + `allowedTransitions` on invalid), `GET /admin/meta/entity-states` machine-readable definition; responses include `status`, `state`, `allowedTransitions` (legacy `active` boolean kept in sync — backward compatible)
+- Process lifecycle exposed in `GET /health` as `phase` (`starting/running/shutting_down`)
 
 ### Changed
 - Project renamed to **Modern AdServer** and relicensed under the **MIT** license (previously GPL-2.0-or-later, see `LICENSE.txt`)

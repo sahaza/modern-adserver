@@ -1,3 +1,5 @@
+import type { EntityStatus } from './stateMachine.js';
+
 export interface Agency {
   id: number;
   name: string;
@@ -13,7 +15,10 @@ export interface Campaign {
   id: number;
   advertiserId: number;
   name: string;
+  /** Legacy mirror of status: true exactly when status === 'active'. Kept for backward compatibility. */
   active: boolean;
+  /** Explicit lifecycle status — the single source of truth for transitions. */
+  status: EntityStatus;
   startDate: Date | null;
   endDate: Date | null;
   weight: number;
@@ -23,7 +28,10 @@ export interface Banner {
   id: number;
   campaignId: number;
   name: string;
+  /** Legacy mirror of status: true exactly when status === 'active'. Kept for backward compatibility. */
   active: boolean;
+  /** Explicit lifecycle status — the single source of truth for transitions. */
+  status: EntityStatus;
   weight: number;
   width: number;
   height: number;

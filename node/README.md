@@ -55,12 +55,22 @@ Admin API:
 
 ```
 db/schema.sql          PostgreSQL schema
-src/domain/            domain types + banner selection engine
+src/domain/            domain types, state machine, banner selection engine
 src/db/                Kysely table types, repository interface, memory + Postgres implementations
-src/routes/            delivery and admin HTTP routes
+src/routes/            health, delivery and admin HTTP routes
 src/server.ts          application factory + entrypoint
 tests/                 vitest suites
 ```
+
+## Domain state machine
+
+All implicit state is centralized in `src/domain/stateMachine.ts` (single source of truth):
+
+- **Entity status** (campaigns, banners): `draft → active ⇄ paused → archived`, `archived → draft`
+- **Effective state**: `scheduled` / `active` / `expired` derived from status + campaign date window; only `active` is delivery-eligible
+- **Process lifecycle**: `starting → running → shutting_down`, exposed as `phase` in `GET /health`
+- The legacy `active` boolean is kept and always mirrors `status === 'active'`, so existing clients keep working
+- Transitions are validated server-side (`POST /admin/{campaigns,banners}/:id/transition` → `409` + `allowedTransitions` on invalid); the machine definition is machine-readable at `GET /admin/meta/entity-states`
 
 ## License
 

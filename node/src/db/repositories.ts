@@ -1,4 +1,8 @@
 import type { AdHourlyStat, Banner, BannerCandidate, Campaign, Zone } from '../domain/types.js';
+import type { EntityStatus } from '../domain/stateMachine.js';
+
+export type CampaignInput = Omit<Campaign, 'id' | 'status'> & { status?: EntityStatus };
+export type BannerInput = Omit<Banner, 'id' | 'status'> & { status?: EntityStatus };
 
 export interface Repositories {
   healthCheck(): Promise<boolean>;
@@ -10,12 +14,15 @@ export interface Repositories {
   listZoneBanners(zoneId: number): Promise<BannerCandidate[]>;
   linkBannerToZone(zoneId: number, bannerId: number): Promise<void>;
 
-  createCampaign(input: Omit<Campaign, 'id'>): Promise<Campaign>;
+  createCampaign(input: CampaignInput): Promise<Campaign>;
   listCampaigns(): Promise<Campaign[]>;
+  getCampaign(campaignId: number): Promise<Campaign | null>;
+  setCampaignStatus(campaignId: number, status: EntityStatus): Promise<Campaign>;
 
-  createBanner(input: Omit<Banner, 'id'>): Promise<Banner>;
+  createBanner(input: BannerInput): Promise<Banner>;
   listBanners(): Promise<Banner[]>;
   getBanner(bannerId: number): Promise<Banner | null>;
+  setBannerStatus(bannerId: number, status: EntityStatus): Promise<Banner>;
 
   recordImpression(bannerId: number, zoneId: number, at: Date): Promise<void>;
   recordClick(bannerId: number, zoneId: number, at: Date): Promise<void>;
@@ -81,8 +88,9 @@ export class MemoryRepositories implements Repositories {
     }
   }
 
-  async createCampaign(input: Omit<Campaign, 'id'>): Promise<Campaign> {
-    const campaign: Campaign = { id: this.nextCampaignId++, ...input };
+  async createCampaign(input: CampaignInput): Promise<Campaign> {
+    const status = input.status ?? (input.active ? 'active' : 'paused');
+    const campaign: Campaign = { id: this.nextCampaignId++, ...input, status };
     this.campaigns.set(campaign.id, campaign);
     return campaign;
   }
@@ -91,8 +99,23 @@ export class MemoryRepositories implements Repositories {
     return [...this.campaigns.values()];
   }
 
-  async createBanner(input: Omit<Banner, 'id'>): Promise<Banner> {
-    const banner: Banner = { id: this.nextBannerId++, ...input };
+  async getCampaign(campaignId: number): Promise<Campaign | null> {
+    return this.campaigns.get(campaignId) ?? null;
+  }
+
+  async setCampaignStatus(campaignId: number, status: EntityStatus): Promise<Campaign> {
+    const campaign = this.campaigns.get(campaignId);
+    if (!campaign) {
+      throw new Error(`Campaign ${campaignId} not found`);
+    }
+    const updated: Campaign = { ...campaign, status, active: status === 'active' };
+    this.campaigns.set(campaignId, updated);
+    return updated;
+  }
+
+  async createBanner(input: BannerInput): Promise<Banner> {
+    const status = input.status ?? (input.active ? 'active' : 'paused');
+    const banner: Banner = { id: this.nextBannerId++, ...input, status };
     this.banners.set(banner.id, banner);
     return banner;
   }
@@ -103,6 +126,16 @@ export class MemoryRepositories implements Repositories {
 
   async getBanner(bannerId: number): Promise<Banner | null> {
     return this.banners.get(bannerId) ?? null;
+  }
+
+  async setBannerStatus(bannerId: number, status: EntityStatus): Promise<Banner> {
+    const banner = this.banners.get(bannerId);
+    if (!banner) {
+      throw new Error(`Banner ${bannerId} not found`);
+    }
+    const updated: Banner = { ...banner, status, active: status === 'active' };
+    this.banners.set(bannerId, updated);
+    return updated;
   }
 
   private bump(bannerId: number, at: Date, field: 'impressions' | 'clicks'): void {

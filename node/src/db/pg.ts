@@ -4,8 +4,9 @@ import { dirname, join } from 'node:path';
 import { Kysely, PostgresDialect, sql } from 'kysely';
 import pg from 'pg';
 import type { AdHourlyStat, Banner, BannerCandidate, Campaign, Zone } from '../domain/types.js';
+import type { EntityStatus } from '../domain/stateMachine.js';
 import type { Database } from './schema.js';
-import type { Repositories } from './repositories.js';
+import type { BannerInput, CampaignInput, Repositories } from './repositories.js';
 
 const schemaPath = join(dirname(fileURLToPath(import.meta.url)), '../../db/schema.sql');
 
@@ -79,13 +80,15 @@ export class PgRepositories implements Repositories {
       .execute();
   }
 
-  async createCampaign(input: Omit<Campaign, 'id'>): Promise<Campaign> {
+  async createCampaign(input: CampaignInput): Promise<Campaign> {
+    const status = input.status ?? (input.active ? 'active' : 'paused');
     const row = await this.db
       .insertInto('campaigns')
       .values({
         advertiser_id: input.advertiserId,
         name: input.name,
         active: input.active,
+        status,
         start_date: input.startDate,
         end_date: input.endDate,
         weight: input.weight,
@@ -100,13 +103,34 @@ export class PgRepositories implements Repositories {
     return rows.map(mapCampaign);
   }
 
-  async createBanner(input: Omit<Banner, 'id'>): Promise<Banner> {
+  async getCampaign(campaignId: number): Promise<Campaign | null> {
+    const row = await this.db
+      .selectFrom('campaigns')
+      .selectAll()
+      .where('id', '=', campaignId)
+      .executeTakeFirst();
+    return row ? mapCampaign(row) : null;
+  }
+
+  async setCampaignStatus(campaignId: number, status: EntityStatus): Promise<Campaign> {
+    const row = await this.db
+      .updateTable('campaigns')
+      .set({ status, active: status === 'active' })
+      .where('id', '=', campaignId)
+      .returningAll()
+      .executeTakeFirstOrThrow();
+    return mapCampaign(row);
+  }
+
+  async createBanner(input: BannerInput): Promise<Banner> {
+    const status = input.status ?? (input.active ? 'active' : 'paused');
     const row = await this.db
       .insertInto('banners')
       .values({
         campaign_id: input.campaignId,
         name: input.name,
         active: input.active,
+        status,
         weight: input.weight,
         width: input.width,
         height: input.height,
@@ -131,6 +155,16 @@ export class PgRepositories implements Repositories {
       .where('id', '=', bannerId)
       .executeTakeFirst();
     return row ? mapBanner(row) : null;
+  }
+
+  async setBannerStatus(bannerId: number, status: EntityStatus): Promise<Banner> {
+    const row = await this.db
+      .updateTable('banners')
+      .set({ status, active: status === 'active' })
+      .where('id', '=', bannerId)
+      .returningAll()
+      .executeTakeFirstOrThrow();
+    return mapBanner(row);
   }
 
   private async bump(bannerId: number, at: Date, field: 'impressions' | 'clicks'): Promise<void> {
@@ -183,15 +217,18 @@ function mapCampaign(row: {
   advertiser_id: number;
   name: string;
   active: boolean;
+  status: string | null;
   start_date: Date | null;
   end_date: Date | null;
   weight: number;
 }): Campaign {
+  const status = (row.status ?? (row.active ? 'active' : 'paused')) as EntityStatus;
   return {
     id: row.id,
     advertiserId: row.advertiser_id,
     name: row.name,
     active: row.active,
+    status,
     startDate: row.start_date,
     endDate: row.end_date,
     weight: row.weight,
@@ -203,6 +240,7 @@ function mapBanner(row: {
   campaign_id: number;
   name: string;
   active: boolean;
+  status: string | null;
   weight: number;
   width: number;
   height: number;
@@ -210,11 +248,13 @@ function mapBanner(row: {
   click_url: string | null;
   html_body: string | null;
 }): Banner {
+  const status = (row.status ?? (row.active ? 'active' : 'paused')) as EntityStatus;
   return {
     id: row.id,
     campaignId: row.campaign_id,
     name: row.name,
     active: row.active,
+    status,
     weight: row.weight,
     width: row.width,
     height: row.height,

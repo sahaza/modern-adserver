@@ -78,6 +78,23 @@ Admin API:
 * `POST|GET /admin/zones`, `POST|GET /admin/campaigns`, `POST|GET /admin/banners`
 * `POST /admin/zones/:zoneId/banners` — link a banner to a zone
 * `GET /admin/banners/:bannerId/stats` — hourly impressions/clicks
+* `POST /admin/campaigns/:id/transition`, `POST /admin/banners/:id/transition` — explicit lifecycle transition (`{"to": "paused"}`); invalid transitions return `409` with `allowedTransitions`
+* `GET /admin/meta/entity-states` — machine-readable state machine definition (statuses, transitions, effective states)
+
+Campaign and banner responses include `status` (explicit lifecycle state), `state` (effective state, see below), `allowedTransitions`, and the legacy `active` boolean (always mirrored from `status === 'active'`).
+
+## Lifecycle state machine
+
+Explicit statuses: `draft`, `active`, `paused`, `archived`. Allowed transitions:
+
+| From | To |
+|---|---|
+| `draft` | `active`, `archived` |
+| `active` | `paused`, `archived` |
+| `paused` | `active`, `draft`, `archived` |
+| `archived` | `draft` |
+
+The **effective state** additionally derives from the campaign date window: an `active` campaign before its `startDate` is `scheduled`, after its `endDate` it is `expired`. Only effective state `active` is eligible for delivery.
 
 See [`node/README.md`](node/README.md) for details.
 
